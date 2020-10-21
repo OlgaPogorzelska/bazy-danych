@@ -1,5 +1,3 @@
-2.
-CREATE DATABASE cw3;
 3.
 CREATE EXTENSION postgis;
 4.
@@ -53,7 +51,7 @@ d)
  SELECT nazwa, ST_Perimeter(geometria) AS obwod  from cw_3.budynki ORDER BY obwod DESC limit 2;
 
 e)
-SELECT ST_MaxDistance(budynki.geometria, pkt.geometria) FROM cw_3.punkty_informacyjne AS pkt, cw_3.budynki AS budynki
+SELECT ST_Distance(budynki.geometria, pkt.geometria) FROM cw_3.punkty_informacyjne AS pkt, cw_3.budynki AS budynki
 WHERE budynki.nazwa='BuildingC' AND pkt.nazwa='G';
 
 f)
