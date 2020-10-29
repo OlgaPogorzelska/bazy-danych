@@ -1,0 +1,39 @@
+4.
+CREATE TABLE tableB AS
+SELECT ST_Union(DISTINCT popp.geom) AS geom FROM popp , majrivers 
+WHERE ST_Distance(popp.geom, majrivers.geom) < 100000 AND popp.f_codedesc LIKE 'Building';
+
+SELECT ST_NumGeometries(geom) FROM tableB;
+
+5. 
+
+CREATE TABLE airportsNew2  AS SELECT name, elev, geom  FROM airports;
+
+a) 
+SELECT airportsNew2.* FROM airportsNew2 ORDER BY ST_X(geom) LIMIT 1;
+SELECT airportsNew2.* FROM airportsNew2 ORDER BY ST_X(geom) DESC LIMIT 1;
+
+
+b) INSERT INTO airportsNew2(name, geom, elev)
+VALUES
+('airportB',
+CONCAT('Point(
+        ',(SELECT
+	((SELECT ST_Y(geom) FROM airportsNew2 ORDER BY ST_Y(geom) DESC LIMIT 1) +
+	(SELECT ST_Y(geom) FROM airportsNew2 ORDER BY ST_Y(geom) LIMIT 1))/2),' 
+        ',(SELECT
+	((SELECT ST_X(geom) FROM airportsNew2 ORDER BY ST_X(geom) DESC LIMIT 1) +
+	(SELECT ST_X(geom)  FROM airportsNew2 ORDER BY ST_X(geom) LIMIT 1))/2),')'),100.00);
+
+6. 
+SELECT ST_Area(ST_Buffer(ST_ShortestLine(
+	(SELECT geom FROM lakes WHERE names LIKE 'Iliamna Lake'),
+	(SELECT geom FROM airports WHERE name LIKE 'AMBLER')), 1000));
+
+7. 
+SELECT trees.vegdesc AS type, sum(trees.area_km2) as sum1 ,sum(tundra.area_km2) as sum2 , sum(swamp.area_km2) as sum3
+FROM trees,tundra, swamp ,   
+GROUP BY trees.vegdesc, trees.f_codedesc;
+
+
+
