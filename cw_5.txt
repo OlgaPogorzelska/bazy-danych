@@ -1,0 +1,32 @@
+1. 
+
+CREATE TABLE obiekty(nazwa varchar, geom geometry);
+a)
+INSERT INTO obiekty values('obiekt1',ST_GeomFromText('CIRCULARSTRING(0 1, 1 1, 2 0, 3 1, 4 2, 5 1,6 1)'));
+b)
+INSERT INTO obiekty values('obiekt2',ST_GeomFromText('CURVEPOLYGON(CIRCULARSTRING(10 6,14 6, 16 4, 14 2, 12 0, 10 2,10 6),CIRCULARSTRING(11 2, 13 2 ,11 2))'));
+c)
+INSERT INTO obiekty values('obiekt3',ST_GeomFromText('POLYGON(( 7 15, 10 17, 12 13, 7 15))'));
+d)
+INSERT INTO obiekty values('obiekt4',ST_GeomFromText('MULTILINESTRING((20 20, 25 25,27 24, 25 22, 26 21, 22 19, 20.5 19.5))'));
+e)
+INSERT INTO obiekty values('obiekt5',ST_AsText(ST_Union(ST_GeomFromText('POINT(30 30 59)'), ST_GeomFromText('POINT(30 30 59)'))));
+f)
+INSERT INTO obiekty values('obiekt6',ST_AsText(ST_Union(ST_GeomFromText('POINT(4 2)'), ST_GeomFromText('LINESTRING(1 1,3 2)'))));
+
+
+2.SELECT ST_Buffer(the_geom,5) As sqft FROM ( SELECT ST_AsText(ST_ShortestLine((SELECT geom from obiekty where nazwa like 'obiekt3'),
+(SELECT geom from obiekty where nazwa like 'obiekt4'))) from obiekty limit 1) As foo(the_geom);
+
+3.
+ UPDATE obiekty set geom=ST_AsText(ST_LineMerge(geom))  where nazwa='obiekt4';
+  UPDATE obiekty set geom=(SELECT ST_Polygonize(geom) from obiekty) where nazwa='obiekt4';
+
+4.
+INSERT INTO obiekty VALUES('obiekt7', ST_AsText(ST_Union((SELECT geom from obiekty where nazwa='obiekt3'), 
+ (SELECT geom from obiekty where nazwa='obiekt4'))));
+
+5.
+SELECT ST_Buffer(geom,5) As pole from obiekty where
+ ST_GeometryType(geom)  NOT LIKE 'ST_CircularString' AND ST_GeometryType(geom) NOT LIKE 'ST_CurvePolygon';
+
