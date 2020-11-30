@@ -1,0 +1,25 @@
+1. SELECT matchid as id_meczu , player AS strzelec FROM gole WHERE teamid='POL';
+
+2. SELECT gtime AS bramka FROM mecze JOIN gole ON (id=matchid) WHERE gole.matchid=1004 and gole.player='Jakub Blaszczykowski';
+
+3. SELECT player , teamname ,stadium ,mdate FROM mecze M JOIN gole G ON M.id = G.matchid 
+   JOIN druzyny D  ON D.id = G.teamid WHERE D.id='POL';
+
+4. SELECT team1, team2 ,player, gtime FROM mecze M JOIN gole G ON m.id=G.matchid WHERE player LIKE 'Mario %';
+
+5. SELECT player, teamid , coach ,gtime FROM gole G JOIN druzyny D ON D.id=G.teamid WHERE gtime<=10;
+
+6. SELECT teamname, gtime FROM gole G JOIN druzyny D ON D.id=G.teamid WHERE coach='Franciszek Smuda';
+
+7. SELECT player, stadium FROM mecze M JOIN gole G ON M.id=G.matchid WHERE stadium ='National Stadium, Warsaw';
+
+8. SELECT player, gtime FROM mecze  JOIN gole  ON matchid = id WHERE (team1='GER' AND team2='GRE' and teamid='GER') ;
+
+9. SELECT teamname, COUNT(gtime) FROM gole  JOIN druzyny  ON teamid = id GRoup by teamname Order by count(gtime) DESC ;
+
+10. SELECT stadium, COUNT(gtime) FROM gole  JOIN mecze  ON matchid = id GRoup by stadium Order by count(gtime) DESC ;
+
+
+
+
+
